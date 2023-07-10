@@ -24,7 +24,7 @@ public class Switch : MonoBehaviour
     public void OFF()
     {
         index = 0;
-        Off.gameObject.SetActive(true);
-        On.gameObject.SetActive(false);
+        Off.gameObject.SetActive(false);
+        On.gameObject.SetActive(true);
     }
 }
