@@ -102,7 +102,7 @@ public class Deck1: MonoBehaviour
         if(Input.GetKeyDown(KeyCode.K))
         {
             Debug.Log("Before Shuffle => " + string.Join(", ", Shoe));
-            Shuffle(Shoe);
+            //Shuffle(Shoe);
             Debug.Log("After Shuffle => "+string.Join(",", Shoe ));
         }
     }
