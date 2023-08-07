@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Deck1: MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class Deck1: MonoBehaviour
     public List<Sprite> Shoe;
     private Dictionary<string, int> cardValues;
     private List<Sprite> dealtCards;
+    private int remainingCards;
+    private TextMeshProUGUI cardsRemainingText;
 
     void Start()
     {
@@ -69,6 +72,11 @@ public class Deck1: MonoBehaviour
         };
 
         Shoe = new List<Sprite>(DeckOfCards);
+        Shuffle(Shoe);
+        dealtCards = new List<Sprite>();
+        remainingCards = 312;
+        cardsRemainingText = GetComponent<TextMeshProUGUI>();
+        cardsRemainingText.text = remainingCards.ToString();
     }
 
     void Shuffle<T>(List<T> inputList)
@@ -90,6 +98,9 @@ public class Deck1: MonoBehaviour
             Shoe.RemoveAt(0); 
             dealtCards.Add(card);
             Debug.Log("Dealt card: " + card.name);
+            remainingCards--;
+            Debug.Log("Remaining cards: " + remainingCards);
+            cardsRemainingText.text = remainingCards.ToString();
         }
         else
         {
