@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Deck1: MonoBehaviour
 {
@@ -12,6 +13,12 @@ public class Deck1: MonoBehaviour
     private List<Sprite> dealtCards;
     private int remainingCards;
     private TextMeshProUGUI cardsRemainingText;
+    private GameObject panelFichas;
+    private Image playerCard1;
+    private Image playerCard2;
+    private Image dealerCard1;
+    private Image dealerCard2;
+
 
     void Start()
     {
@@ -77,6 +84,11 @@ public class Deck1: MonoBehaviour
         remainingCards = 312;
         cardsRemainingText = GetComponent<TextMeshProUGUI>();
         cardsRemainingText.text = remainingCards.ToString();
+        panelFichas = GameObject.Find("PanelDeFichas");
+        playerCard1 = GameObject.Find("PC1").GetComponent<Image>();
+        playerCard2 = GameObject.Find("PC2").GetComponent<Image>();
+        dealerCard1 = GameObject.Find("CC1").GetComponent<Image>();
+        dealerCard2 = GameObject.Find("CC2").GetComponent<Image>();
     }
 
     void Shuffle<T>(List<T> inputList)
@@ -90,26 +102,53 @@ public class Deck1: MonoBehaviour
         }
     }
 
-    public void DealCard()
+    public IEnumerator DealCard()
     {
-        if (Shoe.Count > 0)
+        for (int i = 0; i < 4; i++)
         {
-            Sprite card = Shoe[0];
-            Shoe.RemoveAt(0); 
-            dealtCards.Add(card);
-            Debug.Log("Dealt card: " + card.name);
-            remainingCards--;
-            Debug.Log("Remaining cards: " + remainingCards);
-            cardsRemainingText.text = remainingCards.ToString();
+
+            if (Shoe.Count > 0)
+            {
+                Sprite card = Shoe[0];
+                Shoe.RemoveAt(0); 
+                dealtCards.Add(card);
+                switch (i)
+                {
+                    case 0:
+                        playerCard1.sprite = card;
+                        break;
+                    case 1:
+                        dealerCard1.sprite = card;
+                        break;
+                    case 2:
+                        playerCard2.sprite = card;
+                        break;
+                    case 3:
+                        dealerCard2.sprite = card;
+                        break;
+                }
+                //Debug.Log("Dealt card: " + card.name);
+                remainingCards--;
+                panelFichas.SetActive(false);
+                Debug.Log("Remaining cards: " + remainingCards);
+                cardsRemainingText.text = remainingCards.ToString();
+            }
+            else
+            {
+                Debug.Log("No more cards to deal.");
+            }
+            yield return new WaitForSeconds(0.5f);
         }
-        else
-        {
-            Debug.Log("No more cards to deal.");
-        }
+    }
+
+    public void StartDealCard()
+    {
+        StartCoroutine(DealCard());
     }
 
     void Update()
     {
+
         if(Input.GetKeyDown(KeyCode.K))
         {
             Debug.Log("Before Shuffle => " + string.Join(", ", Shoe));
