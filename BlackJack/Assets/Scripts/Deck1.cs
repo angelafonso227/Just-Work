@@ -18,6 +18,8 @@ public class Deck1: MonoBehaviour
     private Image playerCard2;
     private Image dealerCard1;
     private Image dealerCard2;
+    private Image dealerBlind;
+    public GameObject dealerBlindCard;
 
 
     void Start()
@@ -89,6 +91,8 @@ public class Deck1: MonoBehaviour
         playerCard2 = GameObject.Find("PC2").GetComponent<Image>();
         dealerCard1 = GameObject.Find("CC1").GetComponent<Image>();
         dealerCard2 = GameObject.Find("CC2").GetComponent<Image>();
+        dealerBlind = GameObject.Find("CCB").GetComponent<Image>();
+
     }
 
     void Shuffle<T>(List<T> inputList)
@@ -118,6 +122,7 @@ public class Deck1: MonoBehaviour
                         playerCard1.sprite = card;
                         break;
                     case 1:
+                        dealerBlind.sprite = Blind;
                         dealerCard1.sprite = card;
                         break;
                     case 2:
@@ -140,6 +145,13 @@ public class Deck1: MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
     }
+
+    public void OnStayButtonClick()
+    {
+        dealerBlindCard.SetActive(false);
+    }
+
+    
 
     public void StartDealCard()
     {
