@@ -20,6 +20,10 @@ public class Deck1: MonoBehaviour
     private Image dealerCard2;
     private Image dealerBlind;
     public GameObject dealerBlindCard;
+    private Image playerHitCard1;
+    private Image playerHitCard2;
+    private Image playerHitCard3;
+    private Image playerHitCard4;
 
 
     void Start()
@@ -92,7 +96,10 @@ public class Deck1: MonoBehaviour
         dealerCard1 = GameObject.Find("CC1").GetComponent<Image>();
         dealerCard2 = GameObject.Find("CC2").GetComponent<Image>();
         dealerBlind = GameObject.Find("CCB").GetComponent<Image>();
-
+        playerHitCard1 = GameObject.Find("PHC1").GetComponent<Image>(); 
+        playerHitCard2 = GameObject.Find("PHC2").GetComponent<Image>();
+        playerHitCard3 = GameObject.Find("PHC3").GetComponent<Image>();  
+        playerHitCard4 = GameObject.Find("PHC4").GetComponent<Image>(); 
     }
 
     void Shuffle<T>(List<T> inputList)
@@ -149,6 +156,19 @@ public class Deck1: MonoBehaviour
     public void OnStayButtonClick()
     {
         dealerBlindCard.SetActive(false);
+    }
+
+    public void OnHitButtonClick()
+    {
+        if (Shoe.Count > 0)
+        {
+            Sprite card = Shoe[0];
+            Shoe.RemoveAt(0);
+            dealtCards.Add(card);
+            playerHitCard1.sprite = card;
+            remainingCards--;
+            cardsRemainingText.text = remainingCards.ToString();
+        }
     }
 
     
