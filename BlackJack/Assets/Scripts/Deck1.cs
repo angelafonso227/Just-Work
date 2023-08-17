@@ -14,6 +14,7 @@ public class Deck1: MonoBehaviour
     private int remainingCards;
     private TextMeshProUGUI cardsRemainingText;
     private GameObject panelFichas;
+	public GameObject menuHSDS;
     private Image playerCard1;
     private Image playerCard2;
     private Image dealerCard1;
@@ -24,6 +25,8 @@ public class Deck1: MonoBehaviour
     private Image playerHitCard2;
     private Image playerHitCard3;
     private Image playerHitCard4;
+    private int nextHitCardIndex = 0;
+    private int playerTotalSum;
 
 
     void Start()
@@ -127,6 +130,7 @@ public class Deck1: MonoBehaviour
                 {
                     case 0:
                         playerCard1.sprite = card;
+						playerTotalSum += GetCardValue(card);
                         break;
                     case 1:
                         dealerBlind.sprite = Blind;
@@ -134,6 +138,7 @@ public class Deck1: MonoBehaviour
                         break;
                     case 2:
                         playerCard2.sprite = card;
+						playerTotalSum += GetCardValue(card);
                         break;
                     case 3:
                         dealerCard2.sprite = card;
@@ -150,7 +155,9 @@ public class Deck1: MonoBehaviour
                 Debug.Log("No more cards to deal.");
             }
             yield return new WaitForSeconds(0.5f);
+			Debug.Log("Player Total Sum: " + playerTotalSum);
         }
+		menuHSDS.SetActive(true);
     }
 
     public void OnStayButtonClick()
@@ -159,19 +166,55 @@ public class Deck1: MonoBehaviour
     }
 
     public void OnHitButtonClick()
-    {
-        if (Shoe.Count > 0)
-        {
-            Sprite card = Shoe[0];
-            Shoe.RemoveAt(0);
-            dealtCards.Add(card);
-            playerHitCard1.sprite = card;
-            remainingCards--;
-            cardsRemainingText.text = remainingCards.ToString();
-        }
-    }
+	{
+		if (nextHitCardIndex < 4 && Shoe.Count > 0)
+		{
+			Sprite card = Shoe[0];
+			Shoe.RemoveAt(0);
+			dealtCards.Add(card);
+			int cardValue = GetCardValue(card);
+        	playerTotalSum += cardValue;
 
-    
+			switch (nextHitCardIndex)
+			{
+				case 0:
+					playerHitCard1.sprite = card;
+					break;
+				case 1:
+					playerHitCard2.sprite = card;
+					break;
+				case 2:
+					playerHitCard3.sprite = card;
+					break;
+				case 3:
+					playerHitCard4.sprite = card;
+					break;
+			}
+			nextHitCardIndex++;
+			remainingCards--;
+			cardsRemainingText.text = remainingCards.ToString();
+
+			Debug.Log("Player Total Sum: " + playerTotalSum);
+			if (playerTotalSum > 21)
+			{
+				Debug.Log("Player Bust");
+			}
+		}
+	}   
+
+	private int GetCardValue(Sprite card)
+	{
+		// Implementa la lógica para obtener el valor de la carta usando el diccionario cardValues
+		if (cardValues.ContainsKey(card.name))
+		{
+			return cardValues[card.name];
+		}
+		else
+		{
+			Debug.LogError("Card value not found: " + card.name);
+			return 0; // Valor predeterminado en caso de no encontrar la carta en el diccionario
+		}
+	} 
 
     public void StartDealCard()
     {
