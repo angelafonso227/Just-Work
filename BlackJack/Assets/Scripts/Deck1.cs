@@ -27,6 +27,7 @@ public class Deck1: MonoBehaviour
     private Image playerHitCard4;
     private int nextHitCardIndex = 0;
     private int playerTotalSum;
+    private int casinoTotalSum;
 
 
     void Start()
@@ -135,6 +136,7 @@ public class Deck1: MonoBehaviour
                     case 1:
                         dealerBlind.sprite = Blind;
                         dealerCard1.sprite = card;
+                        casinoTotalSum += GetCardValue(card);
                         break;
                     case 2:
                         playerCard2.sprite = card;
@@ -142,6 +144,7 @@ public class Deck1: MonoBehaviour
                         break;
                     case 3:
                         dealerCard2.sprite = card;
+                        casinoTotalSum += GetCardValue(card);
                         break;
                 }
                 //Debug.Log("Dealt card: " + card.name);
@@ -156,6 +159,8 @@ public class Deck1: MonoBehaviour
             }
             yield return new WaitForSeconds(0.5f);
 			Debug.Log("Player Total Sum: " + playerTotalSum);
+            Debug.Log("Player Total Sum: " + casinoTotalSum);
+
         }
 		menuHSDS.SetActive(true);
     }
@@ -163,6 +168,7 @@ public class Deck1: MonoBehaviour
     public void OnStayButtonClick()
     {
         dealerBlindCard.SetActive(false);
+        menuHSDS.SetActive(false);
     }
 
     public void OnHitButtonClick()
@@ -198,6 +204,7 @@ public class Deck1: MonoBehaviour
 			if (playerTotalSum > 21)
 			{
 				Debug.Log("Player Bust");
+                
 			}
 		}
 	}   
