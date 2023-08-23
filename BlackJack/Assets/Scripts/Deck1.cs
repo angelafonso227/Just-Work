@@ -28,6 +28,8 @@ public class Deck1: MonoBehaviour
     private int nextHitCardIndex = 0;
     private int playerTotalSum;
     private int casinoTotalSum;
+    private int casinoBlindValue;
+    public Sprite CartaBorrada;
 
 
     void Start()
@@ -103,7 +105,7 @@ public class Deck1: MonoBehaviour
         playerHitCard1 = GameObject.Find("PHC1").GetComponent<Image>(); 
         playerHitCard2 = GameObject.Find("PHC2").GetComponent<Image>();
         playerHitCard3 = GameObject.Find("PHC3").GetComponent<Image>();  
-        playerHitCard4 = GameObject.Find("PHC4").GetComponent<Image>(); 
+        playerHitCard4 = GameObject.Find("PHC4").GetComponent<Image>();
     }
 
     void Shuffle<T>(List<T> inputList)
@@ -136,7 +138,7 @@ public class Deck1: MonoBehaviour
                     case 1:
                         dealerBlind.sprite = Blind;
                         dealerCard1.sprite = card;
-                        casinoTotalSum += GetCardValue(card);
+                        casinoBlindValue += GetCardValue(card);
                         break;
                     case 2:
                         playerCard2.sprite = card;
@@ -159,7 +161,7 @@ public class Deck1: MonoBehaviour
             }
             yield return new WaitForSeconds(0.5f);
 			Debug.Log("Player Total Sum: " + playerTotalSum);
-            Debug.Log("Player Total Sum: " + casinoTotalSum);
+            Debug.Log("Dealer Total Sum: " + casinoTotalSum);
 
         }
 		menuHSDS.SetActive(true);
@@ -168,6 +170,8 @@ public class Deck1: MonoBehaviour
     public void OnStayButtonClick()
     {
         dealerBlindCard.SetActive(false);
+        casinoTotalSum += casinoBlindValue;
+        Debug.Log("Dealer Total Sum: " + casinoTotalSum);
         menuHSDS.SetActive(false);
     }
 
@@ -204,10 +208,41 @@ public class Deck1: MonoBehaviour
 			if (playerTotalSum > 21)
 			{
 				Debug.Log("Player Bust");
-                
+                StartCoroutine(WaitForAction());
+                StartCoroutine(JustWait(5f));
+                menuHSDS.SetActive(false);
+                StartCoroutine(JustWait(5f));
+                panelFichas.SetActive(true);                
 			}
 		}
 	}   
+
+        private IEnumerator WaitForAction()
+    {
+        yield return new WaitForSeconds(0.3f);
+        playerCard1.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.3f);
+        playerCard2.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.3f);
+        playerHitCard1.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.08f);
+        playerHitCard2.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.08f);
+        playerHitCard3.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.08f);
+        playerHitCard4.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.08f);
+        dealerBlind.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.2f);
+        dealerCard1.sprite = CartaBorrada;
+        yield return new WaitForSeconds(0.2f);
+        dealerCard2.sprite = CartaBorrada;
+    }
+
+    private IEnumerator JustWait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+    }
 
 	private int GetCardValue(Sprite card)
 	{
@@ -225,6 +260,10 @@ public class Deck1: MonoBehaviour
 
     public void StartDealCard()
     {
+        nextHitCardIndex = 0;
+        playerTotalSum = 0;
+        casinoTotalSum = 0;
+        casinoBlindValue = 0;
         StartCoroutine(DealCard());
     }
 

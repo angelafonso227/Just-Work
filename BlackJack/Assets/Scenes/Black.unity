@@ -6652,6 +6652,7 @@ MonoBehaviour:
   Shoe: []
   menuHSDS: {fileID: 1899976062}
   dealerBlindCard: {fileID: 2036015764}
+  CartaBorrada: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!114 &1036336663
 MonoBehaviour:
   m_ObjectHideFlags: 0
